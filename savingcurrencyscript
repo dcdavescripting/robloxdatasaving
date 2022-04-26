@@ -1,0 +1,20 @@
+local dataStoreService = game:GetService('DataStoreService')
+local dataStore = dataStoreService:GetDataStore('dataStore')
+
+game.Players.PlayerAdded:Connect(function(player)
+	local leaderstats = Instance.new('Folder',player)
+	leaderstats.Name = 'leaderstats'
+	local cash = Instance.new('IntValue',leaderstats)
+	cash.Name = 'Cash' -- change to the name of your currency
+	if dataStore:GetAsync(player.UserId) then
+		cash.Value = dataStore:GetAsync(player.UserId)
+	else
+		cash.Value = dataStore:SetAsync(player.UserId,0)
+	end
+	
+	
+end)
+
+game.Players.PlayerRemoving:Connect(function(player)
+	dataStore:SetAsync(player.UserId,player.leaderstats.Cash.Value) -- make sure to change "Cash" to the name of your currency stated above
+end)
